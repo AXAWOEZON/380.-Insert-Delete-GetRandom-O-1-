@@ -1,0 +1,68 @@
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+#include <unordered_map>
+#include <set>
+#include <unordered_set>
+#include <iterator>
+
+using namespace std;
+
+class RandomizedSet {
+public:
+    unordered_map<int, int> faiter; // Map to store elements as key-value pairs for quick access
+    unordered_set<int> elements; // Set to store unique elements for efficient retrieval
+
+    RandomizedSet() {
+        [=]() { // Lambda expression to improve performance
+            ios_base::sync_with_stdio(false); // Disabling synchronization with C I/O functions
+            cin.tie(nullptr); // Detaching cin from cout to improve I/O performance
+            cout.tie(nullptr); // Detaching cout from cin to improve I/O performance
+            }();
+
+        srand(static_cast<unsigned int>(time(nullptr))); // Initializing srand for generating random numbers
+    }
+
+    bool insert(int val) { 
+        if (faiter.find(val) != faiter.end()) // If the value is already present in the map
+            return false; // Return false, indicating insertion failure
+
+        faiter[val] = val; // Insert the value into the map
+        elements.insert(val); // Insert the value into the set
+        return true; // Return true, indicating successful insertion
+    }
+
+    bool remove(int val) { 
+        auto its = elements.find(val); // Search for the value in the set
+
+        if (its != elements.end()) { // If the value is found
+            elements.erase(its); // Remove the value from the set
+            faiter.erase(val); // Remove the value from the map
+            return true; // Return true, indicating successful removal
+        }
+        return false; // Return false, indicating removal failure
+    }
+
+    int getRandom() {
+        int random_Number = rand() % elements.size(); // Generate a random number within the range of set size
+
+        auto it = elements.begin(); // Iterator pointing to the beginning of the set
+        advance(it, random_Number); // Advance the iterator to a random position
+
+        return *it; // Return the value at the randomly selected position
+    }
+};
+int main() {
+    RandomizedSet randomizedSet;
+
+    randomizedSet.insert(1);
+    randomizedSet.insert(2);
+    randomizedSet.insert(3);
+
+    randomizedSet.remove(2);
+
+    cout << "Random element: " << randomizedSet.getRandom() << endl;
+
+    return 0;
+}
